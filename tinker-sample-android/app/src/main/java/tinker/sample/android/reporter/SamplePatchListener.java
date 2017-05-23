@@ -24,6 +24,7 @@ import com.tencent.tinker.lib.listener.DefaultPatchListener;
 import com.tencent.tinker.lib.tinker.Tinker;
 import com.tencent.tinker.lib.tinker.TinkerLoadResult;
 import com.tencent.tinker.lib.util.TinkerLog;
+import com.tencent.tinker.lib.util.UpgradePatchRetry;
 import com.tencent.tinker.loader.shareutil.ShareConstants;
 import com.tencent.tinker.loader.shareutil.SharePatchFileUtil;
 import com.tencent.tinker.loader.shareutil.ShareTinkerInternals;
@@ -33,7 +34,6 @@ import java.util.Properties;
 
 import tinker.sample.android.app.BuildInfo;
 import tinker.sample.android.crash.SampleUncaughtExceptionHandler;
-import tinker.sample.android.util.UpgradePatchRetry;
 import tinker.sample.android.util.Utils;
 
 /**
@@ -87,7 +87,7 @@ public class SamplePatchListener extends DefaultPatchListener {
 
                 if (tinker.isTinkerLoaded()) {
                     TinkerLoadResult tinkerLoadResult = tinker.getTinkerLoadResultIfPresent();
-                    if (tinkerLoadResult != null) {
+                    if (tinkerLoadResult != null && !tinkerLoadResult.useInterpretMode) {
                         String currentVersion = tinkerLoadResult.currentVersion;
                         if (patchMd5.equals(currentVersion)) {
                             returnCode = Utils.ERROR_PATCH_ALREADY_APPLY;
